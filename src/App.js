@@ -1,27 +1,27 @@
-<<<<<<< HEAD
-=======
-import React from 'react';
->>>>>>> dc0721038fc6833f639b69334fde338605f39518
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { Switch, Route } from "react-router-dom";
+
+import ProjectList from "./components/Projects/ProjectList";
+import ProjectDetails from "./components/Projects/ProjectDetails";
+import EditProject from "./components/Projects/EditProject";
+import TaskDetails from "./components/Tasks/TaskDetails";
+import Navbar from "./components/Navbar/Navbar";
+import Home from "./components/Home/Home";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Navbar />
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route
+          path="/projects/:projectId/tasks/:taskId"
+          component={TaskDetails}
+        />
+        <Route path="/projects/:id" component={ProjectDetails} />
+        <Route path="/edit" component={EditProject} />
+        <Route path="/projects" component={ProjectList} />
+      </Switch>
     </div>
   );
 }
