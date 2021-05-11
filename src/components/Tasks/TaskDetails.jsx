@@ -1,8 +1,11 @@
 import React, { Component } from "react";
-import axios from "axios";
+
+import TaskService from "../../services/TaskService";
 
 class TaskDetails extends Component {
   state = {};
+
+  service = new TaskService();
 
   componentDidMount() {
     this.getTheTask();
@@ -10,17 +13,13 @@ class TaskDetails extends Component {
 
   getTheTask = () => {
     const { params } = this.props.match;
-    axios
-      .get(
-        `http://localhost:5000/api/projects/${params.id}/tasks/${params.taskId}`
-      )
+
+    this.service
+      .getOneTask(params.id, params.taskId)
       .then((responseFromApi) => {
-        const theTask = responseFromApi.data;
-        this.setState(theTask);
+        this.setState(responseFromApi);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((error) => console.error(error));
   };
 
   render() {
