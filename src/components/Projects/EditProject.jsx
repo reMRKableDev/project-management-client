@@ -1,11 +1,13 @@
 import React, { Component } from "react";
-import axios from "axios";
 
+import ProjectService from "../../services/ProjectService";
 class EditProject extends Component {
   state = {
     title: this.props.project.title,
     description: this.props.project.description,
   };
+
+  service = new ProjectService();
 
   // HANDLE INPUT CHANGES
   handleInputChanges = (event) => {
@@ -20,12 +22,19 @@ class EditProject extends Component {
     const { title, description } = this.state;
     const { _id } = this.props.project;
 
-    axios
+    this.service
+      .updateProject(_id, { title, description })
+      .then((response) => {
+        response.message && this.props.getTheProject();
+      })
+      .catch((err) => console.error(err));
+
+    /*     axios
       .put(`http://localhost:5000/api/projects/${_id}`, { title, description })
       .then((response) => {
         response.data.message && this.props.getTheProject();
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error(err)); */
   };
 
   render() {

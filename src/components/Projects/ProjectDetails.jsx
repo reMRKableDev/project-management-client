@@ -1,21 +1,27 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import EditProject from "./EditProject";
 import AddTask from "../Tasks/AddTask";
 
+import ProjectService from "../../services/ProjectService";
+
 const ProjectDetails = (props) => {
   const [details, setDetails] = useState({});
 
-  // Api Caller
+  // API CALLER
   const getSingleProject = () => {
     const { id } = props.match.params;
 
-    fetch(`http://localhost:5000/api/projects/${id}`)
-      .then((response) => response.json())
-      .then((data) => setDetails(data))
-      .catch((err) => console.error(err));
+    // NEW PROJECT SERVICE INSTANCE
+    const service = new ProjectService();
+
+    service
+      .getOneProject(id)
+      .then((responseFromApi) => setDetails(responseFromApi))
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   // MAKE API CALL WHEN COMPONENT MOUNTS
@@ -44,12 +50,11 @@ const ProjectDetails = (props) => {
     const { id } = props.match.params;
     // const { _id } = details;
 
-    const response = await axios.delete(
-      `http://localhost:5000/api/projects/${id}`
-    );
-    const { data } = response;
+    const service = new ProjectService();
 
-    data.message ? props.history.push("/projects") : props.history.push("/404");
+    const response = await service.removeProject(id);
+
+    response.message && props.history.push("/projects");
   };
 
   // Render task form
@@ -66,6 +71,18 @@ const ProjectDetails = (props) => {
         <AddTask theProject={details} getTheProject={getSingleProject} />
       )
     );
+  };
+
+  const ownershipCheck = (project) => {
+    if (props.loggedInUser && project.owner === props.loggedInUser._id) {
+      return (
+        <div>
+          <div>{renderEditForm()}</div>
+
+          <button onClick={() => deleteProject()}>Delete</button>
+        </div>
+      );
+    }
   };
 
   return (
@@ -87,9 +104,7 @@ const ProjectDetails = (props) => {
           </div>
         ))}
 
-      <div>{renderEditForm()}</div>
-
-      <button onClick={() => deleteProject()}>Delete</button>
+      {ownershipCheck(details)}
 
       <div>{renderAddTaskForm()}</div>
     </div>

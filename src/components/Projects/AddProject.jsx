@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
+
+import ProjectService from "../../services/ProjectService";
 
 const initialState = {
   title: "",
@@ -8,6 +9,8 @@ const initialState = {
 
 const AddProject = ({ getData }) => {
   const [formState, setFormState] = useState(initialState);
+
+  const service = new ProjectService();
 
   // HANDLE THE CHANGES IN THE INPUT FIELDS
   const handleInputChange = (event) => {
@@ -19,10 +22,9 @@ const AddProject = ({ getData }) => {
   const handleFormSubmit = (event) => {
     event.preventDefault();
 
-    axios
-      .post("http://localhost:5000/api/projects", formState)
-      .then((response) => {
-        console.log(response);
+    service
+      .createProject(formState)
+      .then(() => {
         getData();
         setFormState(initialState);
       })
@@ -39,14 +41,12 @@ const AddProject = ({ getData }) => {
           name="title"
           value={formState.title}
           onChange={handleInputChange}
-          required
         />
         <label>Description:</label>
         <textarea
           name="description"
           value={formState.description}
           onChange={handleInputChange}
-          required
         />
 
         <input type="submit" value="Submit" />
