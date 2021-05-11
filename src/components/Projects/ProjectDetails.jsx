@@ -104,6 +104,8 @@ const ProjectDetails = (props) => {
           </div>
         ))}
 
+      <img src={details.imageUrl} alt="project" />
+
       {ownershipCheck(details)}
 
       <div>{renderAddTaskForm()}</div>
