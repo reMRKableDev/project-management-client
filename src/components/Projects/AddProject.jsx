@@ -35,22 +35,18 @@ const AddProject = ({ getData }) => {
 
   // HANDLE FILE UPLOAD
   const handleFileUpload = (event) => {
-    // Creates a new FormData object that will take the file upload data
-    const uploadData = new FormData();
-    uploadData.append("imageUrl", event.target.files[0]);
+    const uploadData = new FormData(); // FormData represents a form that can upload files
+    uploadData.append("imageUrl", event.target.files[0]); // this will represent the uploaded file
 
     const service = new UploadService();
 
-    // upload the data to cloudinary
     service
       .upload(uploadData)
       .then((response) => {
-        // The response from uploading to cloudinary is the url which will be saved in the database.
+        console.log(response);
         setFormState({ ...formState, imageUrl: response.cloudinaryUrl });
       })
-      .catch((err) => {
-        console.error("Error while uploading the file: ", err);
-      });
+      .catch((err) => console.error(err));
   };
 
   return (

@@ -2,12 +2,10 @@ import axios from "axios";
 
 class UploadService {
   constructor() {
-    let service = axios.create({
+    this.service = axios.create({
       baseURL: "http://localhost:5000/api",
       withCredentials: true,
     });
-
-    this.service = service;
   }
 
   // Method to use for uploading an image
