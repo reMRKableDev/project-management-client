@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./App.css";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 
 import ProjectList from "./components/Projects/ProjectList";
 import ProjectDetails from "./components/Projects/ProjectDetails";
@@ -42,6 +42,7 @@ function App() {
     <div className="App">
       <Navbar userInSession={loggedInUser} setUser={setTheUserToGlobalState} />
       <Switch>
+        <Route exact path="/login" render={() => <Redirect to="/projects" />} />
         <ProtectedRoute
           user={loggedInUser}
           exact

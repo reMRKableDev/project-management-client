@@ -1,9 +1,10 @@
 import axios from "axios";
+const { REACT_APP_BACKEND_BASE_URL } = process.env;
 
 class ProjectService {
   constructor() {
     let service = axios.create({
-      baseURL: "http://localhost:5000/api",
+      baseURL: REACT_APP_BACKEND_BASE_URL,
       withCredentials: true,
     });
 
